@@ -1,0 +1,14 @@
+[
+  {
+    "id": "1",
+    "username": "Lupa",
+    "age": 19,
+    "hobbies": ["Asking for payment", "Be with Pupa"]
+  },
+  {
+    "id": "2",
+    "username": "Pupa",
+    "age": 19,
+    "hobbies": ["Be with Lupa", "Asking for payment"]
+  }
+]
