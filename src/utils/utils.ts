@@ -16,8 +16,8 @@ export const errorCreator = (res: ServerResponse, err: unknown) => {
       res.writeHead(400, { 'Content-type': 'application/json'});
       break;
     default:
-      res.writeHead(404, { 'Content-type': 'application/json'});
-      res.end(JSON.stringify({ message: errorMessages.UNKNOWN_ERROR }));
+      res.writeHead(500, { 'Content-type': 'application/json'});
+      res.end(JSON.stringify({ message: errorMessages.SERVERSIDE_ERROR }));
       break;
   }
 

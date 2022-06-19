@@ -6,7 +6,8 @@
   "scripts": {
     "start:multi": "npx ts-node cluster.ts",
     "start:dev": "nodemon index.ts",
-    "start:prod": "npx ts-node index.ts"
+    "start:prod": "npx ts-node index.ts",
+    "test": "mocha --require ts-node/register ./src/tests/ApiTests.ts"
   },
   "author": "eve337 <vesunchik1945@gmail.com>",
   "license": "ISC",
@@ -19,8 +20,12 @@
   },
   "repository": "https://github.com/Eve337/crud-api.git",
   "dependencies": {
+    "@types/mocha": "^9.1.1",
     "@types/node": "^18.0.0",
+    "chai": "^4.3.6",
+    "chai-http": "^4.3.0",
     "dotenv": "^16.0.1",
+    "mocha": "^10.0.0",
     "ts-node": "^10.8.1"
   }
 }

@@ -15,5 +15,6 @@ export enum errorMessages {
   USER_NOT_FOUND = 'User not found',
   BODY_DOES_NOT_CONTAIN_REQUIRED_FIELDS ='Body does not contain required fields',
   INVALID_FORMAT_OF_ID = 'Invalid format of id',
-  UNKNOWN_ERROR = 'Unknown error'
+  UNKNOWN_ERROR = 'Unknown error',
+  SERVERSIDE_ERROR ='Sorry, we have an error at serverside',
 }

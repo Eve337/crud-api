@@ -13,6 +13,7 @@ export async function getAllUsers(req: IncomingMessage, res: ServerResponse) {
     const users = await getAll();
     res.writeHead(200, { 'Content-type': 'application/json'});
     res.end(JSON.stringify(users));
+    return;
   } catch (e) {
     console.log('Something wrong', e);
   }
@@ -84,7 +85,7 @@ export async function deleteUser(req: IncomingMessage, res: ServerResponse, id: 
     await getById(id);
     await remove(id);
 
-    res.writeHead(200, { 'Content-type': 'application/json'});
+    res.writeHead(204, { 'Content-type': 'application/json'});
     res.end(JSON.stringify({ message: `User ${id} has been removed`}));
     
   } catch (e) {

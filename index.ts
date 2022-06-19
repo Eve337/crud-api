@@ -3,7 +3,9 @@ import http from 'http';
 import 'dotenv/config';
 import { getAllUsers, getUser, createUser, updateUser, deleteUser } from './src/controllers/UsersController';
 
-const server = http.createServer((req: http.IncomingMessage, res: http.ServerResponse) => {
+const PORT = process.env.PORT || 5000;
+
+export const server = http.createServer((req: http.IncomingMessage, res: http.ServerResponse) => {
   if (req.url === ENDPOINT_USERS && req.method === reqMethods.GET) {
     getAllUsers(req, res);
   } else if (req.url?.match(getUserByIdRegex) && req.method === reqMethods.GET) {
@@ -23,8 +25,6 @@ const server = http.createServer((req: http.IncomingMessage, res: http.ServerRes
     res.end(JSON.stringify({ message: 'Page not found'}));
   }
   
-});
+}).listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
-const PORT = process.env.PORT || 5000;
-
-server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+export default server;

@@ -25,22 +25,24 @@ export const getById = (id: string): Promise<User> => {
 
 export const create = (user: User) => {
   return new Promise((resolve, reject) => {
+    const temp: User[] = users;
     const newUser = {id: uuidv4(), ...user};
-    users.push(newUser);
+    temp.push(newUser);
 
-    writeNewUser(pathToData, users);
+    writeNewUser(pathToData, temp);
     resolve(newUser);
   });
 }
 
 export const update = (id: string, user: User) => {
   return new Promise((resolve, reject) => {
-    const index = users.findIndex((user) => user.id === id);
+    const temp: User[] = users;
+    const index = temp.findIndex((user) => user.id === id);
 
-    users[index] = { id, ...user }
+    temp[index] = { id, ...user }
 
-    writeNewUser(pathToData, users);
-    resolve(users[index]);
+    writeNewUser(pathToData, temp);
+    resolve(temp[index]);
   });
 }
 
