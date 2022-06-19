@@ -21,5 +21,5 @@ npm run start:prod starts production mode
 npm run test starts test 
 ```
 
-After starting the app on port (3000 as default) 
+After starting the app on port (5000 as default) 
 Tests can be run with the server turned off
