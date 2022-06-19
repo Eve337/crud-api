@@ -1,3 +1,4 @@
+import { errorMessages } from './../types/types';
 import { User } from './../types/User';
 import fs from 'fs';
 import { IncomingMessage } from 'http';
@@ -27,11 +28,11 @@ export const getPostData = (req: IncomingMessage): Promise<User> => {
       });
 
       req.on('end', () => {
-        const validUser = checkUser(body)
+        const validUser: User | null = checkUser(body)
         if(validUser) {
           res(validUser);
         } else {
-          rej(validUser);
+          rej(errorMessages.BODY_DOES_NOT_CONTAIN_REQUIRED_FIELDS);
         }
       });
     } catch (e) {

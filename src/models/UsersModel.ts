@@ -2,6 +2,7 @@ import { User } from './../types/User';
 import users from '../storage/users.json';
 import { v4 as uuidv4 } from 'uuid';
 import { writeNewUser } from '../utils/utils';
+import { errorMessages } from '../types/types';
 
 export const getAll = () => {
   return new Promise((resolve, reject) => {
@@ -16,7 +17,7 @@ export const getById = (id: string): Promise<User> => {
     if (user) {
       resolve(user);
     } else {
-      reject(false);
+      reject(errorMessages.USER_NOT_FOUND);
     }
   });
 }
@@ -42,3 +43,12 @@ export const update = (id: string, user: User) => {
   });
 }
 
+
+export const remove = (id: string) => {
+  return new Promise((resolve, reject) => {
+    const editedUsersArr = users.filter((user: User) => user.id !== id);
+
+    writeNewUser('./src/storage/users.json', editedUsersArr);
+    resolve(editedUsersArr);
+  });
+}

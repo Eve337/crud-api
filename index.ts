@@ -1,7 +1,7 @@
 import { getUserByIdRegex, reqMethods, ENDPOINT_USERS } from './src/types/types'
 import http from 'http';
 import 'dotenv/config';
-import { getAllUsers, getUser, createUser, updateUser } from './src/controllers/UsersController';
+import { getAllUsers, getUser, createUser, updateUser, deleteUser } from './src/controllers/UsersController';
 
 const server = http.createServer((req: http.IncomingMessage, res: http.ServerResponse) => {
   if (req.url === ENDPOINT_USERS && req.method === reqMethods.GET) {
@@ -14,6 +14,9 @@ const server = http.createServer((req: http.IncomingMessage, res: http.ServerRes
   } else if (req.url?.match(getUserByIdRegex) && req.method === reqMethods.PUT) {
     const id = req.url.split('/')[3];
     updateUser(req, res, id);
+  } else if (req.url?.match(getUserByIdRegex) && req.method === reqMethods.DELETE) {
+    const id = req.url.split('/')[3];
+    deleteUser(req, res, id);
   }
   else {
     res.writeHead(404, { 'Content-Type': 'application/json' });

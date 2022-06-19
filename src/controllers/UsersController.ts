@@ -1,3 +1,4 @@
+import { remove } from './../models/UsersModel';
 import { IncomingMessage, ServerResponse } from 'http';
 import { getAll, getById, create, update } from '../models/UsersModel';
 import { User } from '../types/User';
@@ -21,15 +22,12 @@ export async function getAllUsers(req: IncomingMessage, res: ServerResponse) {
 export async function getUser(req: IncomingMessage, res: ServerResponse, id: string) {
   try {
     const user = await getById(id);
-    if (!user) {
-      res.writeHead(400, { 'Content-type': 'application/json'});
-      res.end(JSON.stringify({ message: 'User not found' }));
-    } else {
-      res.writeHead(200, { 'Content-type': 'application/json'});
-      res.end(JSON.stringify(user));
-    }
-  } catch (e) {
-    console.log('Something wrong', e);
+    console.log(user);
+    res.writeHead(200, { 'Content-type': 'application/json'});
+    res.end(JSON.stringify(user));
+  } catch (error) {
+    res.writeHead(400, { 'Content-type': 'application/json'});
+    res.end(JSON.stringify({ message: error }));
   }
 }
 
@@ -45,10 +43,8 @@ export async function createUser(req: IncomingMessage, res: ServerResponse) {
       res.end(JSON.stringify(newUser));
     }
   } catch (e) {
-    console.log('here');
     res.writeHead(400, { 'Content-type': 'application/json'});
-    res.end('Body doesnt have required fields');
-    if(e) console.log('Something wrong', e);
+    res.end(JSON.stringify({ message: e }));
   }
 }
 
@@ -57,27 +53,25 @@ export async function createUser(req: IncomingMessage, res: ServerResponse) {
 export async function updateUser(req: IncomingMessage, res: ServerResponse, id: string) {
   try {
     const user: User = await getById(id);
-    if (!user) {
-      res.writeHead(404, { 'Content-type': 'application/json'});
-      res.end(JSON.stringify({ message: 'User not found' }));
-    } else {
-      const body = await getPostData(req);
+    
+    const body = await getPostData(req);
 
-      if (body) {
-        const { username, age, hobbies } = body;
+    if (body) {
+      const { username, age, hobbies } = body;
 
-        const updatedData = {
-          username: username || user.username,
-          age: age || user.age,
-          hobbies: hobbies || user.hobbies,
-        }
-        const updatedUser = await update(id, updatedData);
-        res.writeHead(200, { 'Content-type': 'application/json'});
-        res.end(JSON.stringify(updatedUser));
+      const updatedData = {
+        username: username || user.username,
+        age: age || user.age,
+        hobbies: hobbies || user.hobbies,
       }
+      const updatedUser = await update(id, updatedData);
+      res.writeHead(200, { 'Content-type': 'application/json'});
+      res.end(JSON.stringify(updatedUser));
     }
+  
   } catch (e) {
-    if(e) console.log('Something wrong', e);
+    res.writeHead(400, { 'Content-type': 'application/json'});
+    res.end(JSON.stringify({ message: e }));
   }
 }
 
@@ -87,14 +81,13 @@ export async function updateUser(req: IncomingMessage, res: ServerResponse, id: 
 export async function deleteUser(req: IncomingMessage, res: ServerResponse, id: string) {
   try {
     const user = await getById(id);
-    if (!user) {
-      res.writeHead(400, { 'Content-type': 'application/json'});
-      res.end(JSON.stringify({ message: 'User not found' }));
-    } else {
-      res.writeHead(200, { 'Content-type': 'application/json'});
-      res.end(JSON.stringify(user));
-    }
+    await remove(id);
+
+    res.writeHead(200, { 'Content-type': 'application/json'});
+    res.end(JSON.stringify({ message: `User ${id} has been removed`}));
+    
   } catch (e) {
-    console.log('Something wrong', e);
+    res.writeHead(400, { 'Content-type': 'application/json'});
+    res.end(JSON.stringify({ message: e }));
   }
 }
