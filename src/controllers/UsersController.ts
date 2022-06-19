@@ -1,3 +1,4 @@
+import { checkId, errorCreator } from './../utils/utils';
 import { remove } from './../models/UsersModel';
 import { IncomingMessage, ServerResponse } from 'http';
 import { getAll, getById, create, update } from '../models/UsersModel';
@@ -21,13 +22,12 @@ export async function getAllUsers(req: IncomingMessage, res: ServerResponse) {
 // @route [GET]/api/users/{id}
 export async function getUser(req: IncomingMessage, res: ServerResponse, id: string) {
   try {
+    await checkId(id);
     const user = await getById(id);
-    console.log(user);
     res.writeHead(200, { 'Content-type': 'application/json'});
     res.end(JSON.stringify(user));
-  } catch (error) {
-    res.writeHead(400, { 'Content-type': 'application/json'});
-    res.end(JSON.stringify({ message: error }));
+  } catch (e) {
+    errorCreator(res, e);
   }
 }
 
@@ -43,8 +43,7 @@ export async function createUser(req: IncomingMessage, res: ServerResponse) {
       res.end(JSON.stringify(newUser));
     }
   } catch (e) {
-    res.writeHead(400, { 'Content-type': 'application/json'});
-    res.end(JSON.stringify({ message: e }));
+    errorCreator(res, e);
   }
 }
 
@@ -52,6 +51,8 @@ export async function createUser(req: IncomingMessage, res: ServerResponse) {
 // @route [PUT]/api/users/{id}
 export async function updateUser(req: IncomingMessage, res: ServerResponse, id: string) {
   try {
+    await checkId(id);
+
     const user: User = await getById(id);
     
     const body = await getPostData(req);
@@ -70,8 +71,7 @@ export async function updateUser(req: IncomingMessage, res: ServerResponse, id: 
     }
   
   } catch (e) {
-    res.writeHead(400, { 'Content-type': 'application/json'});
-    res.end(JSON.stringify({ message: e }));
+    errorCreator(res, e);
   }
 }
 
@@ -80,14 +80,14 @@ export async function updateUser(req: IncomingMessage, res: ServerResponse, id: 
 // @route [DELETE]/api/users/{id}
 export async function deleteUser(req: IncomingMessage, res: ServerResponse, id: string) {
   try {
-    const user = await getById(id);
+    await checkId(id);
+    await getById(id);
     await remove(id);
 
     res.writeHead(200, { 'Content-type': 'application/json'});
     res.end(JSON.stringify({ message: `User ${id} has been removed`}));
     
   } catch (e) {
-    res.writeHead(400, { 'Content-type': 'application/json'});
-    res.end(JSON.stringify({ message: e }));
+    errorCreator(res, e);
   }
 }

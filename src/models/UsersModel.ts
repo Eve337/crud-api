@@ -4,6 +4,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { writeNewUser } from '../utils/utils';
 import { errorMessages } from '../types/types';
 
+const pathToData = './src/storage/users.json';
+
 export const getAll = () => {
   return new Promise((resolve, reject) => {
     resolve(users);
@@ -13,7 +15,6 @@ export const getAll = () => {
 export const getById = (id: string): Promise<User> => {
   return new Promise((resolve, reject) => {
     const user = users.find((user: User) => user.id === id);
-    console.log(user);
     if (user) {
       resolve(user);
     } else {
@@ -27,7 +28,7 @@ export const create = (user: User) => {
     const newUser = {id: uuidv4(), ...user};
     users.push(newUser);
 
-    writeNewUser('./src/storage/users.json', users);
+    writeNewUser(pathToData, users);
     resolve(newUser);
   });
 }
@@ -38,7 +39,7 @@ export const update = (id: string, user: User) => {
 
     users[index] = { id, ...user }
 
-    writeNewUser('./src/storage/users.json', users);
+    writeNewUser(pathToData, users);
     resolve(users[index]);
   });
 }
@@ -48,7 +49,7 @@ export const remove = (id: string) => {
   return new Promise((resolve, reject) => {
     const editedUsersArr = users.filter((user: User) => user.id !== id);
 
-    writeNewUser('./src/storage/users.json', editedUsersArr);
+    writeNewUser(pathToData, editedUsersArr);
     resolve(editedUsersArr);
   });
 }
